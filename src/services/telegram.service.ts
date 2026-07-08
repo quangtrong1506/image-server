@@ -1,6 +1,6 @@
-import { env } from '@/config/envConfig';
 import axios from 'axios';
 import FormData from 'form-data';
+import { env } from '../config/envConfig';
 
 const TELEGRAM_API_URL = `https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}`;
 

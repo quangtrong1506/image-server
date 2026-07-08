@@ -1,7 +1,7 @@
 import { type NextFunction, type Request, type Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import { telegramService } from '@/services/telegram.service';
+import { telegramService } from '../../src/services/telegram.service';
 
 export class ImageController {
    constructor() {}
