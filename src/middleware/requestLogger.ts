@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import pino from "pino";
 import pinoHttp from "pino-http";
 
-import { env } from "@/common/utils/envConfig";
+import { env } from "@/config/envConfig";
 
 const logger = pino({
 	level: env.isProduction ? "info" : "debug",
@@ -21,7 +21,6 @@ const addRequestId = (req: Request, res: Response, next: NextFunction) => {
 	const existingId = req.headers["x-request-id"] as string;
 	const requestId = existingId || randomUUID();
 
-	// Set for downstream use
 	req.headers["x-request-id"] = requestId;
 	res.setHeader("X-Request-Id", requestId);
 
@@ -34,7 +33,6 @@ const httpLogger = pinoHttp({
 	customLogLevel: (_req, res) => getLogLevel(res.statusCode),
 	customSuccessMessage: (req) => `${req.method} ${req.url} completed`,
 	customErrorMessage: (_req, res) => `Request failed with status code: ${res.statusCode}`,
-	// Only log response bodies in development
 	serializers: {
 		req: (req) => ({
 			method: req.method,

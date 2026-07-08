@@ -1,4 +1,4 @@
-import { env } from "@/common/utils/envConfig";
+import { env } from "@/config/envConfig";
 import { app, logger } from "@/server";
 
 const server = app.listen(env.PORT, () => {
@@ -12,7 +12,7 @@ const onCloseSignal = () => {
 		logger.info("server closed");
 		process.exit();
 	});
-	setTimeout(() => process.exit(1), 10000).unref(); // Force shutdown after 10s
+	setTimeout(() => process.exit(1), 10000).unref();
 };
 
 process.on("SIGINT", onCloseSignal);

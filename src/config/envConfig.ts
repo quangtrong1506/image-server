@@ -8,13 +8,13 @@ const envSchema = z.object({
 
 	HOST: z.string().min(1).default("localhost"),
 
-	PORT: z.coerce.number().int().positive().default(8080),
+	PORT: z.coerce.number().int().positive().default(3000),
 
-	CORS_ORIGIN: z.string().url().default("http://localhost:8080"),
+	API_KEY: z.string().min(1),
 
-	COMMON_RATE_LIMIT_MAX_REQUESTS: z.coerce.number().int().positive().default(1000),
+	TELEGRAM_BOT_TOKEN: z.string().min(1),
 
-	COMMON_RATE_LIMIT_WINDOW_MS: z.coerce.number().int().positive().default(1000),
+	TELEGRAM_CHAT_ID: z.string().min(1),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);

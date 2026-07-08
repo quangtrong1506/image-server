@@ -1,119 +1,94 @@
-# 🚀 Express TypeScript Boilerplate 2025
+# Telegram Image Proxy Server
 
-[![CI](https://github.com/edwinhern/express-typescript/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/edwinhern/express-typescript-2024/actions/workflows/ci.yml)
+A minimal Express + TypeScript server that proxies images through Telegram Private Groups.
 
-```code
-Hey There! 🙌
-🤾 that ⭐️ button if you like this boilerplate.
+## Setup
+
+### 1. Create Telegram Bot
+
+1. Open Telegram and search for **@BotFather**
+2. Send `/newbot` command
+3. Follow the instructions and get your **BOT_TOKEN**
+
+### 2. Create Private Group
+
+1. Create a new group in Telegram (can be private or public)
+2. Add your bot to the group as an **administrator**
+3. Send a message to the group to initialize it
+4. Get the **CHAT_ID** by visiting:
+   ```
+   https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates
+   ```
+
+### 3. Configure Environment
+
+```bash
+cp .env.template .env
 ```
 
-## 🌟 Introduction
-
-Welcome to Express TypeScript Boilerplate 2025 – a simple and ready-to-use starting point for building backend web services with Express.js and TypeScript.
-
-## 💡 Why We Made This
-
-This starter kit helps you:
-
-- ✨ Start new projects faster
-- 📊 Write clean, consistent code
-- ⚡ Build things quickly
-- 🛡️ Follow best practices for security and testing
-
-## 🚀 What's Included
-
-- 📁 Well-organized folders: Files grouped by feature so you can find things easily
-- 💨 Fast development: Quick code running with `tsx` and error checking with `tsc`
-- 🌐 Latest Node.js: Uses the newest stable Node.js version from `.tool-versions`
-- 🔧 Safe settings: Environment settings checked with Zod to prevent errors
-- 🔗 Short import paths: Clean code with easy imports using path shortcuts
-- 🔄 Auto-updates: Keeps dependencies up-to-date with Renovate
-- 🔒 Better security: Built-in protection with Helmet and CORS settings
-- 📊 Easy tracking: Built-in logging with `pino-http`
-- 🧪 Ready-to-test: Testing tools with Vitest and Supertest already set up
-- ✅ Clean code: Consistent coding style with `Biomejs`
-- 📃 Standard responses: Unified API responses using `ServiceResponse`
-- 🐳 Easy deployment: Ready for Docker containers
-- 📝 Input checking: Request validation using Zod
-- 🧩 API browser: Interactive API docs with Swagger UI
-
-## 🛠️ Getting Started
-
-### Video Demo
-
-For a visual guide, watch the [video demo](https://github.com/user-attachments/assets/b1698dac-d582-45a0-8d61-31131732b74e) to see the setup and running of the project.
-
-### Step-by-Step Guide
-
-#### Step 1: 🚀 Initial Setup
-
-- Clone the repository: `git clone https://github.com/edwinhern/express-typescript.git`
-- Navigate: `cd express-typescript`
-- Install dependencies: `pnpm install`
-
-#### Step 2: ⚙️ Environment Configuration
-
-- Create `.env`: Copy `.env.template` to `.env`
-- Update `.env`: Fill in necessary environment variables
-
-#### Step 3: 🏃‍♂️ Running the Project
-
-- Development Mode: `pnpm start:dev`
-- Building: `pnpm build`
-- Production Mode: Set `NODE_ENV="production"` in `.env` then `pnpm build && pnpm start:prod`
-
-## 🤝 Feedback and Contributions
-
-We'd love to hear your feedback and suggestions for further improvements. Feel free to contribute and join us in making backend development cleaner and faster!
-
-🎉 Happy coding!
-
-## 📁 Folder Structure
-
-```code
-├── biome.json
-├── Dockerfile
-├── LICENSE
-├── package.json
-├── pnpm-lock.yaml
-├── README.md
-├── src
-│   ├── api
-│   │   ├── healthCheck
-│   │   │   ├── __tests__
-│   │   │   │   └── healthCheckRouter.test.ts
-│   │   │   └── healthCheckRouter.ts
-│   │   └── user
-│   │       ├── __tests__
-│   │       │   ├── userRouter.test.ts
-│   │       │   └── userService.test.ts
-│   │       ├── userController.ts
-│   │       ├── userModel.ts
-│   │       ├── userRepository.ts
-│   │       ├── userRouter.ts
-│   │       └── userService.ts
-│   ├── api-docs
-│   │   ├── __tests__
-│   │   │   └── openAPIRouter.test.ts
-│   │   ├── openAPIDocumentGenerator.ts
-│   │   ├── openAPIResponseBuilders.ts
-│   │   └── openAPIRouter.ts
-│   ├── common
-│   │   ├── __tests__
-│   │   │   ├── errorHandler.test.ts
-│   │   │   └── requestLogger.test.ts
-│   │   ├── middleware
-│   │   │   ├── errorHandler.ts
-│   │   │   ├── rateLimiter.ts
-│   │   │   └── requestLogger.ts
-│   │   ├── models
-│   │   │   └── serviceResponse.ts
-│   │   └── utils
-│   │       ├── commonValidation.ts
-│   │       ├── envConfig.ts
-│   │       └── httpHandlers.ts
-│   ├── index.ts
-│   └── server.ts
-├── tsconfig.json
-└── vite.config.mts
+Edit `.env`:
+```env
+PORT=3000
+API_KEY=my_secret_key
+TELEGRAM_BOT_TOKEN=YOUR_BOT_TOKEN
+TELEGRAM_CHAT_ID=YOUR_CHAT_ID
 ```
+
+### 4. Install Dependencies
+
+```bash
+pnpm install
+```
+
+### 5. Run Server
+
+```bash
+pnpm start:dev
+```
+
+## API
+
+### Health Check
+
+```bash
+curl http://localhost:3000/health
+```
+
+Response:
+```json
+{ "status": "ok" }
+```
+
+### Upload Image
+
+```bash
+curl -X POST http://localhost:3000/api/upload \
+  -H "x-api-key: my_secret_key" \
+  -F "image=@/path/to/your/image.jpg"
+```
+
+Response:
+```json
+{
+  "success": true,
+  "data": {
+    "id": "telegram_file_id"
+  }
+}
+```
+
+### Get Image
+
+```bash
+curl http://localhost:3000/api/image/:id \
+  -H "x-api-key: my_secret_key" \
+  --output image.jpg
+```
+
+Response: Streams the image directly with proper `Content-Type` header.
+
+## Notes
+
+- Max file size: 20MB
+- Only `image/*` MIME types are accepted
+- Images are stored in your Telegram group (no database required)
