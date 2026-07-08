@@ -2,10 +2,10 @@ import cors from 'cors';
 import express, { type Express } from 'express';
 import helmet from 'helmet';
 import { pino } from 'pino';
-import errorHandler from '../src/middleware/errorHandler';
-import requestLogger from '../src/middleware/requestLogger';
-import { healthCheckRouter } from '../src/routes/healthCheck/healthCheckRouter';
-import { imageRouter } from '../src/routes/imageRouter';
+import errorHandler from './middleware/errorHandler';
+import requestLogger from './middleware/requestLogger';
+import { healthCheckRouter } from './routes/healthCheck/healthCheckRouter';
+import { imageRouter } from './routes/imageRouter';
 
 const logger = pino({ name: 'server start' });
 const app: Express = express();
